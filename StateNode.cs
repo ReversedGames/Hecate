@@ -9,12 +9,12 @@ namespace Hecate {
 	/// Description of StateNode.
 	/// </summary>
 	public class StateNode {
-		private readonly Dictionary<int, StateNode?> children = new Dictionary<int, StateNode?>();
+		private readonly Dictionary<int, StateNode> children = new Dictionary<int, StateNode>();
 		private dynamic? stateValue;
-		private StateNode parent;
+		private StateNode? parent;
 		private int parentName;
 
-		public StateNode(dynamic? stateValue, StateNode parent = null, int parentName = 0) {
+		public StateNode(dynamic? stateValue, StateNode? parent = null, int parentName = 0) {
 			this.stateValue = stateValue;
 			this.parent = parent;
 			this.parentName = parentName;
@@ -24,7 +24,7 @@ namespace Hecate {
 			return stateValue;
 		}
 
-		public StateNode? SetValue(dynamic? setValue) {
+		public StateNode SetValue(dynamic? setValue) {
 			stateValue = setValue;
 
 			return this;
@@ -45,13 +45,14 @@ namespace Hecate {
 
 		// Sets the value of the child variable
 		public StateNode? SetSubvariable(int name, StateNode setValue) {
-			if (!children.ContainsKey(name)) {
-				children[name] = new StateNode(setValue.stateValue, this, name);
+			if (!children.TryGetValue(name, out var child)) {
+				child = new StateNode(setValue.stateValue, this, name);
+				children[name] = child;
 			} else {
-				children[name].SetValue(setValue.stateValue);
+				child.SetValue(setValue.stateValue);
 			}
 
-			return children[name];
+			return child;
 		}
 
 		// Replaces the node with the given tree
@@ -59,10 +60,6 @@ namespace Hecate {
 			if (tree == null) {
 				children.Remove(name);
 			} else {
-				if (!(tree is StateNode)) {
-					tree = new StateNode(tree);
-				}
-
 				children[name] = tree;
 				tree.parent = this;
 				tree.parentName = name;
@@ -84,25 +81,21 @@ namespace Hecate {
 		}
 
 		// Removes this node from it's parent
-		public StateNode? RemoveFromParent() {
-			if (parent != null) {
-				parent.RemoveSubvariable(parentName);
+		public StateNode RemoveFromParent() {
+			if (parent == null) throw new ArgumentException("Invalid parent variable.");
 
-				return this;
-			}
+			parent.RemoveSubvariable(parentName);
 
-			throw new ArgumentException("Invalid parent variable.");
+			return this;
 		}
 
 		// Replaces the node in it's parent's tree
-		public StateNode? ReplaceWith(StateNode? replacement) {
-			if (parent != null) {
-				parent.SetSubtree(parentName, replacement);
+		public StateNode ReplaceWith(StateNode? replacement) {
+			if (parent == null) throw new ArgumentException("Invalid parent variable");
 
-				return this;
-			}
+			parent.SetSubtree(parentName, replacement);
 
-			throw new ArgumentException("Invalid parent variable");
+			return this;
 		}
 
 		// Debug print to the console the whole tree
@@ -113,7 +106,7 @@ namespace Hecate {
 
 			Console.WriteLine(symbolManager.GetString(name) + ": " + stateValue);
 
-			foreach (KeyValuePair<int, StateNode?> node in children) {
+			foreach (KeyValuePair<int, StateNode> node in children) {
 				node.Value.PrintTree(symbolManager, node.Key, level + 1);
 			}
 		}
