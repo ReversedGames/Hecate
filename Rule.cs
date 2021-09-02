@@ -25,7 +25,7 @@ namespace Hecate {
 
 		private static readonly Regex ruleRegex = new Regex("(.*) => (\"\"|\"(\\\\\"|[^\"])*(?<!\\\\)\")?(,)?(.*)");
 		private static readonly Regex flagRegex = new Regex("flag ([A-Za-z0-9_.]+)");
-		private static readonly Regex insetRegex = new Regex("\\[[^\\]]*\\]");
+		private static readonly Regex insetRegex = new Regex("(?<!\\\\)\\[[^\\]]*\\]");
 
 		public Rule(int name, string text, StoryGenerator generator, SymbolManager symbolManager) : this(name, text, generator, symbolManager, new string[0], new string[0]) {
 		}
@@ -122,6 +122,7 @@ namespace Hecate {
 			// Add special characters
 			result = result.Replace("\\n", "\n");
 			result = result.Replace("\\\"", "\"");
+			result = result.Replace("\\[", "[");
 
 			return result;
 		}
