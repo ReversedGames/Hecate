@@ -14,7 +14,7 @@ namespace Hecate {
 		public readonly int type;
 		public readonly StateNode? literal;
 
-		private static Regex tokenRegex = new Regex("([0-9]+([.][0-9]+)?|[()]|\\^|=>|<-|[+\\-*\\/><!=]=?|\"\"|\"(\\\\\"|[^\"])*(?<!\\\\)\"|[a-zA-Z0-9_]+|[.])");
+		private static Regex tokenRegex = new Regex("([0-9]+([.][0-9]+)?|[()]|\\^|=>|<-|[+\\-*\\/><!=]=?|\"\"|\"(\\\\\"|[^\"])*(?<!\\\\)\"|[a-zA-Z0-9_]+|[.#])");
 
 		private static Regex stringRegex = new Regex("^(\"\"|\"(\\\\\"|[^\"])*(?<!\\\\)\")$");
 		private static Regex numberRegex = new Regex("^-?[0-9]+([.][0-9]+)?$");
@@ -43,7 +43,7 @@ namespace Hecate {
 			// Variable path - first one is a variable, the others are literals
 			else if (variableRegex.IsMatch(s)) {
 				// Path literal or rule name
-				if (prevToken == SymbolManager.DOT || prevToken == SymbolManager.CALL) {
+				if (prevToken == SymbolManager.DOT || prevToken == SymbolManager.CALL || prevToken == SymbolManager.MODIFIER) {
 					token = new Token(SymbolManager.LITERAL, symbolManager.GetInt(s));
 				}
 				// Global variable name

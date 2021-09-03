@@ -9,19 +9,11 @@ namespace Hecate {
 	/// Description of StoryGenerator.
 	/// </summary>
 	public class StoryGenerator {
-		private StateNode rootNode;
-		private Dictionary<int, List<Rule>> rules;
-		private SymbolManager symbolManager;
-		private Random random;
-
-
-		public StoryGenerator() {
-			rootNode = new StateNode(42);
-			rules = new Dictionary<int, List<Rule>>();
-			symbolManager = new SymbolManager();
-			random = new Random();
-		}
-
+		private readonly StateNode rootNode = new StateNode(42);
+		private readonly Dictionary<int, List<Rule>> rules = new Dictionary<int, List<Rule>>();
+		private readonly SymbolManager symbolManager = new SymbolManager();
+		private readonly Random random = new Random();
+		private readonly Dictionary<int, Func<object, object>> modifiers = new Dictionary<int, Func<object, object>>();
 
 		public string Generate(string symbol) {
 			Rule tempRule = new Rule(-3, "\"" + symbol + "\"", this, symbolManager);
@@ -55,7 +47,6 @@ namespace Hecate {
 
 			return "";
 		}
-
 
 		public void ParseRuleDirectory(string filepath) {
 			string[] files = System.IO.Directory.GetFiles(filepath, "*.hec");
@@ -147,6 +138,32 @@ namespace Hecate {
 					newVar.SetValue(entry.Value);
 				}
 			}
+		}
+
+		/**
+		 * We don't rewrite existing values
+		 */
+		public void RegisterModifier(string modifierName, Func<object, object> func) {
+			var nameIdx = symbolManager.GetInt(modifierName);
+
+			if (modifiers.ContainsKey(nameIdx)) {
+				return;
+			}
+
+			modifiers[nameIdx] = func;
+		}
+
+		public StateNode ExecuteModifer(StateNode modifier, StateNode value) {
+			Func<object, object> modifierFunc;
+
+			if (!modifiers.TryGetValue(modifier.GetValue(), out modifierFunc)) {
+				throw new Exception($"Unknown modifier '{symbolManager.GetString(modifier.GetValue())}'");
+			}
+
+			var newValue = modifierFunc(value.GetValue());
+
+			// TODO: Do we need to properly set its parent?
+			return new StateNode(newValue);
 		}
 	}
 }

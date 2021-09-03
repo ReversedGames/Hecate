@@ -128,6 +128,7 @@ namespace Hecate {
 
 				case SymbolManager.DOT:
 				case SymbolManager.CALL:
+				case SymbolManager.MODIFIER:
 					return 80;
 
 				case SymbolManager.END_OF_EXPRESSION:
@@ -236,8 +237,14 @@ namespace Hecate {
 				SymbolManager.DIVIDE_TO => left.SetValue(left / right),
 				SymbolManager.AND => (left > 0) && (right > 0) ? 1 : 0,
 				SymbolManager.OR => (left > 0) || (right > 0) ? 1 : 0,
+				SymbolManager.MODIFIER => right != null ? RunModifier(right, left) : throw new Exception("Syntax error: No modifier specified! "),
 				_ => throw new Exception("Syntax error: Invalid operator! " + token.type)
 			};
+		}
+
+		private StateNode RunModifier(StateNode modifier, StateNode? value) {
+			// TODO: Do we need to set its parent?
+			return generator.ExecuteModifer(modifier, value);
 		}
 
 		public bool IsCondition() {
