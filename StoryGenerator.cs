@@ -125,5 +125,28 @@ namespace Hecate {
 
 			rules[name].Add(rule);
 		}
+
+		/**
+		 * We don't rewrite existing values
+		 */
+		public void SetBaseState(Dictionary<string, object> newState) {
+			AddStateDict(newState, rootNode);
+		}
+
+		private void AddStateDict(Dictionary<string, object> newState, StateNode node) {
+			foreach (var entry in newState) {
+				var nameIdx = symbolManager.GetInt(entry.Key);
+
+				if (node.GetSubvariable(nameIdx, createIfNull: false) != null) continue;
+
+				var newVar = node.GetSubvariable(nameIdx, createIfNull: true);
+
+				if (entry.Value is Dictionary<string, object> dict) {
+					AddStateDict(dict, newVar);
+				} else {
+					newVar.SetValue(entry.Value);
+				}
+			}
+		}
 	}
 }
