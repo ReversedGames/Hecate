@@ -101,7 +101,7 @@ You can add an initial state to your generator, to be able to control content fr
 ```c#
 var dict = new Dictionary<string, object> {
     {"megaflops", 42},
-    {"myRecord, new Dictionary<string, object> {
+    {"myRecord", new Dictionary<string, object> {
         {"state", "good"}
     }
 };
