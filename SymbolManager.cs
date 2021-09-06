@@ -48,9 +48,10 @@ namespace Hecate {
 		public const int MODIFIER = 26;
 		public const int CAPITALIZE = 27;
 		public const int OPTIONAL = 28;
-		public const int END_OF_EXPRESSION = 29;
+		public const int OPTIONAL_EQUALS = 29;
+		public const int END_OF_EXPRESSION = 30;
 
-		public const int FIRST_SYMBOL = 30;
+		public const int FIRST_SYMBOL = 31;
 
 		public SymbolManager() {
 			integers = new Dictionary<string, int> {
@@ -63,6 +64,7 @@ namespace Hecate {
 				{ "=", ASSIGN },
 				{ "!", NEGATE },
 				{ "==", EQUALS },
+				{ "?=", OPTIONAL_EQUALS },
 				{ "!=", NOT_EQUALS },
 				{ "<", LESS_THAN },
 				{ ">", GREATER_THAN },
@@ -129,6 +131,7 @@ namespace Hecate {
 		public static bool IsConditionalOperator(int symbol) {
 			switch (symbol) {
 				case EQUALS:
+				case OPTIONAL_EQUALS:
 				case NOT_EQUALS:
 				case LESS_THAN:
 				case GREATER_THAN:

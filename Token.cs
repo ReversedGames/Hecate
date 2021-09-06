@@ -14,7 +14,7 @@ namespace Hecate {
 		public readonly int type;
 		public readonly StateNode? literal;
 
-		private static Regex tokenRegex = new Regex("([0-9]+([.][0-9]+)?|[()]|\\^|\\?|=>|<-|[+\\-*\\/><!=]=?|\"\"|\"(\\\\\"|[^\"])*(?<!\\\\)\"|[a-zA-Z0-9_]+|[.#])");
+		private static Regex tokenRegex = new Regex("([0-9]+([.][0-9]+)?|[()]|\\^|=>|<-|[+\\-*\\/><!=\\?]=?|\\?|\"\"|\"(\\\\\"|[^\"])*(?<!\\\\)\"|[a-zA-Z0-9_]+|[.#])");
 
 		private static Regex stringRegex = new Regex("^(\"\"|\"(\\\\\"|[^\"])*(?<!\\\\)\")$");
 		private static Regex numberRegex = new Regex("^-?[0-9]+([.][0-9]+)?$");

@@ -107,6 +107,7 @@ namespace Hecate {
 					return 10;
 
 				case SymbolManager.EQUALS:
+				case SymbolManager.OPTIONAL_EQUALS:
 				case SymbolManager.NOT_EQUALS:
 				case SymbolManager.LESS_THAN:
 				case SymbolManager.GREATER_THAN:
@@ -233,6 +234,7 @@ namespace Hecate {
 				SymbolManager.MULTIPLY => left * right,
 				SymbolManager.DIVIDE => left / right,
 				SymbolManager.EQUALS => StateNode.EqualsWithNull(left, right) ? 1 : 0,
+				SymbolManager.OPTIONAL_EQUALS => left == null ? 1 : (StateNode.EqualsWithNull(left, right) ? 1 : 0),
 				SymbolManager.NOT_EQUALS => StateNode.EqualsWithNull(left, right) ? 0 : 1,
 				SymbolManager.LESS_THAN => left < right ? 1 : 0,
 				SymbolManager.GREATER_THAN => left > right ? 1 : 0,

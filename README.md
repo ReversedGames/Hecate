@@ -34,11 +34,20 @@ If you want to employ variables, the statements go after the text:
 ```
 next_room => "kitchen", current_room == "foyer"
 ```
+Statements can use the "normal" binary comparison operators (`==`, `!=`, `<`, `<=`, `>`, `>=`) as well as the "optional binary comparison operator" (`?=`) which will return true if the left side of the equation is null, so the following:
+```
+my_rule => "thing", myVar ?= 42
+```
+...will be equivalent to this:
+```
+my_rule => "thing", myVar != null or myVar == 42
+```
 
 You can use flags to allow a similar rule to only apply once (e.g. so no two rules describing weather are used)
 ```
 => "It was raining.", flag weather
 ```
+This is syntactic sugar for `flags.weather == null, let flags.weather`
 
 Rules can have parameters, where you can pass a variable to a rule:
 ```
