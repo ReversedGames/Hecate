@@ -117,6 +117,7 @@ namespace Hecate {
 				case SymbolManager.ADD:
 				case SymbolManager.SUB:
 				case SymbolManager.CAPITALIZE:
+				case SymbolManager.OPTIONAL:
 					return 50;
 
 				case SymbolManager.MULTIPLY:
@@ -158,6 +159,15 @@ namespace Hecate {
 					}
 
 					return val;
+				}
+
+				case SymbolManager.OPTIONAL: {
+					// We need to consume the input in any case
+					string val = Expression(10);
+
+					return generator.GetNextRandomBool()
+						? " " + val
+						: null;
 				}
 				case SymbolManager.NEGATE: {
 					StateNode? result = Expression(100);

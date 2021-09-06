@@ -46,12 +46,22 @@ name E => "she", previous_name == E.name
 name E => "E.name", previous_name != E.name, previous_name = E.name
 ```
 
-You can use the capitalization operator to capitalize rules:
+You can use the capitalization operator (`^`) to capitalize rules:
 ```
-intro => "this is fine"
 story => "[^=>intro]"
+intro => "this is fine"
 ```
 ...which will render `This is fine` when starting on rule `story`.
+
+The optional operator (`?`) can be used to randomly add a rule. It will include a space before the rule content in that case, so make sure to account for that.
+```
+story => "[^=>intro]"
+intro => "this is[?=>really] fine"
+really
+    => "really"
+    => "completely"
+```
+...which will render `This is fine`, `This is really fine` or `This is completely fine`.
 
 ## State model
 The variables are divided into local and global variables. Local variables are those that start with a capital letter.

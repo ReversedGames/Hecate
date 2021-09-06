@@ -117,6 +117,11 @@ namespace Hecate {
 			rules[name].Add(rule);
 		}
 
+		// TODO: This is not a good place for this, refactor!
+		protected internal bool GetNextRandomBool() {
+			return random.NextDouble() > 0.5;
+		}
+
 		/**
 		 * We don't rewrite existing values
 		 */

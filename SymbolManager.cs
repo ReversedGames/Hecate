@@ -47,9 +47,10 @@ namespace Hecate {
 		public const int OR = 25;
 		public const int MODIFIER = 26;
 		public const int CAPITALIZE = 27;
-		public const int END_OF_EXPRESSION = 28;
+		public const int OPTIONAL = 28;
+		public const int END_OF_EXPRESSION = 29;
 
-		public const int FIRST_SYMBOL = 29;
+		public const int FIRST_SYMBOL = 30;
 
 		public SymbolManager() {
 			integers = new Dictionary<string, int> {
@@ -82,6 +83,7 @@ namespace Hecate {
 				{ "or", OR },
 				{ "#", MODIFIER },
 				{ "^", CAPITALIZE },
+				{ "?", OPTIONAL },
 				{ "end_of_expression", END_OF_EXPRESSION }
 			};
 
