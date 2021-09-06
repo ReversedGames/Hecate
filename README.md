@@ -30,11 +30,23 @@ key => "The [=>color] key."
 ```
 ...which will print `The red key.`
 
-If you want to employ variables, the statements go after the text:
+You can create variables using `let`:
+```
+storyConfig => let current_room = "foyer"
+```
+
+If you want to use them, the statements go after the text:
 ```
 next_room => "kitchen", current_room == "foyer"
 ```
-Statements can use the "normal" binary comparison operators (`==`, `!=`, `<`, `<=`, `>`, `>=`) as well as the "optional binary comparison operator" (`?=`) which will return true if the left side of the equation is null, so the following:
+
+Variable creation is also a statement, so you can mix them as you expect:
+```
+next_room => "kitchen", current_room == "foyer", let current_room = "kitchen"
+```
+...which will run only if the `current_room` is `"foyer"` and will set the same variable to `"kitchen"` afterwards.
+
+Comparison statements can use the "normal" binary comparison operators (`==`, `!=`, `<`, `<=`, `>`, `>=`) as well as the "optional binary comparison operator" (`?=`) which will return true if the left side of the equation is null, so the following:
 ```
 my_rule => "thing", myVar ?= 42
 ```
@@ -98,7 +110,7 @@ cat.wings <- null
 
 ## Rule selection
 * The statements after the text on a rule are sorted into two categories; conditions and effects.
-* Conditions are any statement that has one of the conditional operators (`==`, `!=`, `<`, `>`, `>=`, `<=`) and determine if the rule is possible at the given time.
+* Conditions are any statement that has one of the conditional operators (`==`, `!=`, `<`, `>`, `>=`, `<=`, `?=`) and determine if the rule is possible at the given time.
 * Effects are what happens after the rule has been selected.
 * If multiple rules are available for a non-terminal, the applied rule is selected randomly, with each rule weighted by the number of conditions it has, so the rule with the most conditions has the highest chance of being chosen.
 * This heuristic has been appropriated from Evans's presentation on Valve's dialogue system.
