@@ -166,7 +166,7 @@ namespace Hecate {
 					// We need to consume the input in any case
 					string val = Expression(10);
 
-					return generator.GetNextRandomBool()
+					return generator.GetNextRandomBool() && val != ""
 						? " " + val
 						: null;
 				}
